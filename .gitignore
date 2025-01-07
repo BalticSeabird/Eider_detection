@@ -4,9 +4,6 @@
 .RData
 .Ruserdata
 
-# Raw files
-*.raw
-
 # Mac system files
 .DS_Store
 
@@ -15,12 +12,11 @@
 *.gif
 *.jpg
 *.mp4
-!*workflow.png
-
-# CSV files
 *.csv
 *.npy
 *.db
+*.pt
+*.raw
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
