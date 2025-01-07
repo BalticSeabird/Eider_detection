@@ -21,7 +21,7 @@ def minsec2sec(x):
     return int(x.split(":")[0])*60+int(x.split(":")[1])
 
 
-def cut_vid_simpler(file_path, savepath, addseconds): 
+def cut_vid(file_path, savepath, addseconds): 
 
     video = Path(file_path)
     startclip = "00:"+input("Start time (min:sec): ")
@@ -73,7 +73,7 @@ def main():
     
     # Call the function to open the file dialog
     filename = select_file()
-    videoname, freq = cut_vid_simpler(filename, "/Users/jonas/Downloads/vid/", 2)
+    videoname, freq = cut_vid(filename, "/Users/jonas/Downloads/vid/", 2)
     save_frames(videoname, "/Users/jonas/Downloads/ims/", freq)
 
 
