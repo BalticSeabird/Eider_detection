@@ -6,10 +6,10 @@ from ultralytics import YOLO
 from clearml import Task
 
 # Creating an instance of the Roboflow class
-#rf = Roboflow(api_key="2Z8LedwxqBlKAbVYyz8T")
-#project = rf.workspace("ai-course-2024").project("eiders2")
-#version = project.version(1)
-#dataset = version.download("yolov11")
+rf = Roboflow(api_key="2Z8LedwxqBlKAbVYyz8T")
+project = rf.workspace("ai-course-2024").project("eiders2")
+version = project.version(2)
+dataset = version.download("yolov11")
                 
 
 # Initialize ClearML task

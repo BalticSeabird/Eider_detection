@@ -28,7 +28,7 @@ def cut_vid(file_path, savepath, addseconds):
     endclip = "00:"+input("End time (min:sec): ")
     startclip_n = startclip.replace(":", "")
     endclip_n = endclip.replace(":", "")
-    freq = int(input("Sampling frquency: "))
+    freq = int(input("Sampling frequency: "))
     filename_out = f'{savepath}{video.stem}_{startclip_n}_{endclip_n}.mp4'
         
     if 0 < 1: 
