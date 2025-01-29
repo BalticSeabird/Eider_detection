@@ -6,23 +6,23 @@ from ultralytics import YOLO
 from clearml import Task
 
 # Creating an instance of the Roboflow class
-rf = Roboflow(api_key="2Z8LedwxqBlKAbVYyz8T")
-project = rf.workspace("ai-course-2024").project("eiders2")
-version = project.version(2)
-dataset = version.download("yolov11")
+#rf = Roboflow(api_key="2Z8LedwxqBlKAbVYyz8T")
+#project = rf.workspace("ai-course-2024").project("eiders2")
+#version = project.version(2)
+#dataset = version.download("yolov11")
                 
 
 # Initialize ClearML task
 task = Task.init(project_name="YOLOv11 Training Eiders", task_name="YOLOv11 Model Eiders")
 
 # Load a COCO-pretrained YOLO11n model
-model = YOLO("models/yolo11m.pt")
+model = YOLO("models/yolo11n.pt")
 
 # Train the model on the dataset for 50 epochs
-results = model.train(data="Eiders2-1/data.yaml", epochs=50, imgsz=1280, device = [1])
+results = model.train(data="Eiders2-2/data.yaml", batch=32, epochs=100, imgsz=1280)
 
-# Log the results to ClearM
-task.upload_artifact('training_results_dataset_v1', results)
+# Log the results to ClearML
+task.upload_artifact('training_results_dataset_v2', results)
 
 # Save the model
 model.save('models/eider_model_v01.pt')
