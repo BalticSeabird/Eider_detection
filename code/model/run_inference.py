@@ -104,8 +104,8 @@ for vid in vids:
         # Group by second
         grouped = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"]).size().reset_index(name='counts')
 
-        out2.to_csv(outname)
-        grouped.to_csv(outname_grouped)
+        out2.to_csv(outname, index = False)
+        grouped.to_csv(outname_grouped, index = False)
 
 
 # Run example 
