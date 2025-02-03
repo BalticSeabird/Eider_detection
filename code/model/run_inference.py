@@ -12,10 +12,10 @@ stat = sys.argv[2]
 #dateend = "2024-05-10"
 
 # Load a pretrained YOLO model
-model = YOLO("runs/detect/train21/weights/best.pt")
+model = YOLO("runs/detect/train7/weights/best.pt")
 
 # Output folder
-output_dir = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference")
+output_dir = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/yolo11m_train7/")
 output_dir = output_dir.joinpath(stat)
 
 if os.path.exists(output_dir) == False:
@@ -24,6 +24,7 @@ if os.path.exists(output_dir) == False:
 # Define input 
 base_path = Path(f"../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/{stat}")
 vids = list(base_path.rglob("*.mp4"))
+vids.sort()
 #vid = Path("data/EjderNVR_EJDER6_2024-05-03_04.00.00_005325_005410.mp4")
 
 for vid in vids: 
@@ -35,78 +36,83 @@ for vid in vids:
     time = time.replace(".", ":")
     station = stat
 
-    starttime = pd.to_datetime(time)
-    starttime_u = starttime.timestamp()
-    fps = 25
+    try:
 
-    outname = output_dir.joinpath(vid.stem+".csv")
-    outname_grouped = output_dir.joinpath(vid.stem+"_grouped.csv")
+        starttime = pd.to_datetime(time)
+        starttime_u = starttime.timestamp()
+        fps = 25
 
-    # Check that file has not been processed already 
+        outname = output_dir.joinpath(vid.stem+".csv")
+        outname_grouped = output_dir.joinpath(vid.stem+"_grouped.csv")
 
-    if os.path.exists(outname):
-        print(f"File {outname} already exists")
+        # Check that file has not been processed already 
+
+        if os.path.exists(outname):
+            print(f"File {outname} already exists")
+            continue
+
+        else: 
+            # Run inference using the pretrained model and the inout video
+            results = model.predict(vid, 
+                                stream=True, 
+                                save = False,
+                                show = False, 
+                                device = device)
+
+            # Process results list
+            time = []
+            boxes = []
+            #track_ids = []
+            confs = []
+            classes = []
+            framenum = []
+            counter = starttime_u
+            counterx = 0
+
+            for r in results:
+                if not r.boxes.conf.nelement() == 0 :
+                    boxes.append(r.boxes.xyxy.tolist())
+                    #if r.boxes.id is not None:
+                    #    track_ids.append(r.boxes.id.tolist())
+                    #else:
+                    #    track_ids.append([-1 for _ in r.boxes])
+                    classes.append(r.boxes.cls.tolist())
+                    confs.append(r.boxes.conf.tolist())
+                    ndetect = len(r.boxes.conf.tolist())
+                    time.append([counter] * ndetect)
+                    framenum.append([counterx] * ndetect)
+
+                counter += 1/fps
+                counterx += 1
+
+            # Concatenate outputs
+            conf = sum(confs, [])
+            classes = sum(classes, [])
+            boxesx = sum(boxes, [])
+            #track_ids = sum(track_ids, [])
+            times = sum(time, [])
+            framenums = sum(framenum, [])
+
+            # Save as data frames
+            #out1 = pd.DataFrame(boxesx, columns = ["x", "y", "w", "h"])
+            out2 = pd.DataFrame(list(zip(classes, conf, times, framenums)), columns = ["class", "conf", "time", "frame"])
+
+            #out = out1.merge(out2, left_index = True, right_index = True)
+            out2["station"] = station
+            out2["filename"] = filename
+
+            # Actual time
+            out2["datetime"] = pd.to_datetime(out2["time"], unit = "s")
+
+            # Group by second
+            grouped = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"]).size().reset_index(name='counts')
+
+            out2.to_csv(outname, index = False)
+            grouped.to_csv(outname_grouped, index = False)
+    except: 
+        print(f"Error with {vid} (probably file name), continue loop")
         continue
-
-    else: 
-        # Run inference using the pretrained model and the inout video
-        results = model.predict(vid, 
-                            stream=True, 
-                            save = False,
-                            show = False, 
-                            device = device)
-
-        # Process results list
-        time = []
-        boxes = []
-        #track_ids = []
-        confs = []
-        classes = []
-        framenum = []
-        counter = starttime_u
-        counterx = 0
-
-        for r in results:
-            if not r.boxes.conf.nelement() == 0 :
-                boxes.append(r.boxes.xyxy.tolist())
-                #if r.boxes.id is not None:
-                #    track_ids.append(r.boxes.id.tolist())
-                #else:
-                #    track_ids.append([-1 for _ in r.boxes])
-                classes.append(r.boxes.cls.tolist())
-                confs.append(r.boxes.conf.tolist())
-                ndetect = len(r.boxes.conf.tolist())
-                time.append([counter] * ndetect)
-                framenum.append([counterx] * ndetect)
-
-            counter += 1/fps
-            counterx += 1
-
-        # Concatenate outputs
-        conf = sum(confs, [])
-        classes = sum(classes, [])
-        boxesx = sum(boxes, [])
-        #track_ids = sum(track_ids, [])
-        times = sum(time, [])
-        framenums = sum(framenum, [])
-
-        # Save as data frames
-        #out1 = pd.DataFrame(boxesx, columns = ["x", "y", "w", "h"])
-        out2 = pd.DataFrame(list(zip(classes, conf, times, framenums)), columns = ["class", "conf", "time", "frame"])
-
-        #out = out1.merge(out2, left_index = True, right_index = True)
-        out2["station"] = station
-        out2["filename"] = filename
-
-        # Actual time
-        out2["datetime"] = pd.to_datetime(out2["time"], unit = "s")
-
-        # Group by second
-        grouped = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"]).size().reset_index(name='counts')
-
-        out2.to_csv(outname, index = False)
-        grouped.to_csv(outname_grouped, index = False)
-
+        pass
 
 # Run example 
-# python3 code/yolov8/yolo_inference_multiple.py 0 0
+# python3 code/yolov8/yolo_inference.py 0 "EJDER6"
