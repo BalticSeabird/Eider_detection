@@ -7,7 +7,7 @@ import sys
 fig, ax = plt.subplots(5, 1)
 
 # Read data
-out = pd.read_csv("data/compiled2s.csv")
+out = pd.read_csv("data/compiled2sV2.csv")
 out["datetime"] = pd.to_datetime(out["datetime"])
 
 # Subset data for one station at the time: 
