@@ -8,16 +8,29 @@ fig, ax = plt.subplots(5, 1)
 
 # Read data
 out = pd.read_csv("data/compiled2sV2.csv")
-out["datetime"] = pd.to_datetime(out["datetime"])
 
 # Subset data for one station at the time: 
 stat = sys.argv[1]
+out = out[out["station"] == stat]
+out["datetime"] = pd.to_datetime(out["datetime"])
 
-dx = out[out["station"] == stat]
+# Remove duplicates
+
+
+
 plt.suptitle(stat)
 
 for i in range(0, 5):
-    dx2 = dx[dx["class"] == (i)]
+    dx2 = out[out["class"] == (i)]
+    
+    dx2 = dx2.drop_duplicates(subset='datetime')
+
+    # Full date time sequence
+    date_rng = pd.date_range(start=dx2["datetime"].min(), end=dx2["datetime"].max(), freq='2S')
+
+    # Fill missing values
+    dx2 = dx2.set_index('datetime').reindex(date_rng, fill_value=0).reset_index().rename(columns={'index': 'datetime'})
+
     ax[i].plot(dx2["datetime"], dx2["counts"]/50) 
     label = dx2["name"].iloc[0]
     ax[i].annotate(label,
@@ -27,7 +40,7 @@ for i in range(0, 5):
         bbox=dict(facecolor='0.7', edgecolor='none', pad=3.0))
 plt.show()
 
-
+""" 
 # Alternative
 fig, ax = plt.subplots(1, 1)
 
@@ -46,3 +59,4 @@ for i in range(0, 5):
         fontsize='medium', verticalalignment='top', fontfamily='serif',
         bbox=dict(facecolor='0.7', edgecolor='none', pad=3.0))
 plt.show()
+ """
