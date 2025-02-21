@@ -7,14 +7,15 @@ import sys
 fig, ax = plt.subplots(5, 1)
 
 # Read data
-out = pd.read_csv("data/compiled2sV2.csv")
+out = pd.read_csv("data/compiled2sV3.csv")
 
 # Subset data for one station at the time: 
 stat = sys.argv[1]
 out = out[out["station"] == stat]
 out["datetime"] = pd.to_datetime(out["datetime"])
 
-# Remove duplicates
+# Develop aggregated metrics (per 20 seconds?)
+
 
 
 
@@ -31,7 +32,13 @@ for i in range(0, 5):
     # Fill missing values
     dx2 = dx2.set_index('datetime').reindex(date_rng, fill_value=0).reset_index().rename(columns={'index': 'datetime'})
 
-    ax[i].plot(dx2["datetime"], dx2["counts"]/50) 
+    # Create a new y series which is a 10 point running mean of the original y series
+    y = dx2["counts"]/50
+    y_rolling = y.rolling(window=10).mean()
+
+    ax[i].plot(dx2["datetime"], y, c = "black", alpha = 0.5)
+    ax[i].plot(dx2["datetime"], y_rolling, color = "red", alpha = 0.5) 
+
     label = dx2["name"].iloc[0]
     ax[i].annotate(label,
         xy=(0, 1), xycoords='axes fraction',
