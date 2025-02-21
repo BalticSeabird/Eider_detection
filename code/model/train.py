@@ -9,10 +9,10 @@ import torch
 torch.cuda.empty_cache()
 
 # Creating an instance of the Roboflow class
-#rf = Roboflow(api_key="2Z8LedwxqBlKAbVYyz8T")
-#project = rf.workspace("ai-course-2024").project("eiders2")
-#version = project.version(2)
-#dataset = version.download("yolov11")
+rf = Roboflow(api_key="X2yHJUrUKxkMNDPlzaAd")
+project = rf.workspace("research-x1kcu").project("ejder3")
+version = project.version(1)
+dataset = version.download("yolov11")
 
 #PYTORCH_CUDA_ALLOC_CONF=expandable_segments:Tr          
 
@@ -23,13 +23,13 @@ task = Task.init(project_name="YOLOv11 Training Eiders", task_name="YOLOv11 Mode
 model = YOLO("models/yolo11m.pt")
 
 # Train the model on the dataset for 50 epochs
-results = model.train(data="Eiders2-2/data.yaml", batch=8, epochs=100, imgsz=1280, device = 0)
+results = model.train(data="Ejder3-1/data.yaml", batch=8, epochs=200, imgsz=960, device = [0, 1])
 
 # Log the results to ClearML
-task.upload_artifact('training_results_dataset_v2', results)
+task.upload_artifact('training_results_dataset_v5852', results)
 
 # Save the model
-model.save('models/eider_model_v01.pt')
+model.save('models/eider_model_v5852.pt')
 
 # Close the ClearML task
 task.close()

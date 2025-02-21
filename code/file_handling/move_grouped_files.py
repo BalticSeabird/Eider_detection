@@ -1,6 +1,5 @@
 
 from pathlib import Path
-import os
 import shutil
 
 # Define input and output folders
