@@ -8,29 +8,29 @@ import sys
 device = sys.argv[1]
 stat = sys.argv[2]
 
-#datestart = "2024-04-19"
-#dateend = "2024-05-10"
-
 # Load a pretrained YOLO model
 model = YOLO("runs/detect/train7/weights/best.pt")
+modelname = "yolo11m_train7"
+output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/{modelname}/'
 
-# Output folder
-output_dir = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/yolo11m_train7/")
-output_dir = output_dir.joinpath(stat)
-
-if os.path.exists(output_dir) == False:
+if os.path.exists(output_dir1) == False:
     os.makedirs(output_dir)
 
-# Define input 
+# Output folder
+output_dir2 = output_dir.joinpath(stat)
+
+if os.path.exists(output_dir2) == False:
+    os.makedirs(output_dir2)
+
+# Define input video path
 base_path = Path(f"../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/{stat}")
 vids = list(base_path.rglob("*.mp4"))
 vids.sort()
-#vid = Path("data/EjderNVR_EJDER6_2024-05-03_04.00.00_005325_005410.mp4")
 
 for vid in vids: 
-    # Pick out relevant video information
     filename = vid.name
 
+    # Pick out relevant information from name
     name = filename.split("_")
     time = name[-2]+" "+name[-1][0:8]
     time = time.replace(".", ":")
@@ -115,4 +115,4 @@ for vid in vids:
         pass
 
 # Run example 
-# python3 code/yolov8/yolo_inference.py 0 "EJDER6"
+# python3 code/model/run_inference.py 0 "EJDER6"

@@ -23,8 +23,10 @@ d = {"name": ['crow', 'eider_female', 'eider_male', 'gull', 'razorbill'],
 class_id = pd.DataFrame(d)    
 
 out = out.merge(class_id, on = "class")
-out["datetime"] = pd.to_datetime(out["datetime"])
 out["counts"] = out["counts"].astype("int")
-out.sort_values(by = ["datetime"], inplace = True) 
 
-out.to_csv("data/compiled2sV2.csv", index = False)
+out["datetime"] = pd.to_datetime(out["datetime"], format = "mixed")
+
+out.sort_values(by = ["station", "datetime"], inplace = True) 
+
+out.to_csv("data/compiled2sV3.csv", index = False)
