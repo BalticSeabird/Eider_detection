@@ -9,15 +9,16 @@ device = sys.argv[1]
 stat = sys.argv[2]
 
 # Load a pretrained YOLO model
-model = YOLO("runs/detect/train7/weights/best.pt")
-modelname = "yolo11m_train7"
+modelpath = Path("models/eider_model_nano_v5852.pt")
+model = YOLO(modelpath)
+modelname = modelpath.stem
 output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/{modelname}/'
 
 if os.path.exists(output_dir1) == False:
-    os.makedirs(output_dir)
+    os.makedirs(output_dir1)
 
 # Output folder
-output_dir2 = output_dir.joinpath(stat)
+output_dir2 = output_dir1+stat
 
 if os.path.exists(output_dir2) == False:
     os.makedirs(output_dir2)
@@ -42,8 +43,8 @@ for vid in vids:
         starttime_u = starttime.timestamp()
         fps = 25
 
-        outname = output_dir.joinpath(vid.stem+".csv")
-        outname_grouped = output_dir.joinpath(vid.stem+"_grouped.csv")
+        outname = output_dir2+"/"+vid.stem+".csv"
+        outname_grouped = output_dir2+"/"+vid.stem+"_grouped.csv"
 
         # Check that file has not been processed already 
 
@@ -110,9 +111,7 @@ for vid in vids:
             out2.to_csv(outname, index = False)
             grouped.to_csv(outname_grouped, index = False)
     except: 
-        print(f"Error with {vid} (probably file name), continue loop")
-        continue
-        pass
+       print(f"Error with {vid} (probably file name), continue loop")
 
 # Run example 
 # python3 code/model/run_inference.py 0 "EJDER6"
