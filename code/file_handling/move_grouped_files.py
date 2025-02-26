@@ -1,4 +1,6 @@
 
+# Run this script on the inference server
+
 from pathlib import Path
 import shutil
 
