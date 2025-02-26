@@ -43,7 +43,7 @@ for vid in vids:
         starttime_u = starttime.timestamp()
         fps = 25
 
-        outname = output_dir2+"/"+vid.stem+".csv"
+        outname = output_dir2+"/"+vid.stem+"_raw.csv"
         outname_grouped = output_dir2+"/"+vid.stem+"_grouped.csv"
 
         # Check that file has not been processed already 
@@ -106,7 +106,11 @@ for vid in vids:
             out2["datetime"] = pd.to_datetime(out2["time"], unit = "s")
 
             # Group by second
-            grouped = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"]).size().reset_index(name='counts')
+            grouped_data = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"])
+
+            # Aggregate grouped_data (mean confidence score)
+            grouped = grouped_data.agg({"conf": "mean", 
+                            "frame": "count"}).reset_index()        
 
             out2.to_csv(outname, index = False)
             grouped.to_csv(outname_grouped, index = False)
