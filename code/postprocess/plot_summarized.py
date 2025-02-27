@@ -7,15 +7,12 @@ import sys
 fig, ax = plt.subplots(5, 1)
 
 # Read data
-out = pd.read_csv("data/compiled_nanov5852_v1.csv")
+out = pd.read_csv("data/compiled_nanov5852_v3.csv")
 
 # Subset data for one station at the time: 
 stat = sys.argv[1]
 out = out[out["station"] == stat]
 out["datetime"] = pd.to_datetime(out["datetime"])
-
-# Develop aggregated metrics (per 20 seconds?)
-
 
 
 
@@ -26,6 +23,9 @@ for i in range(0, 5):
     
     dx2 = dx2.drop_duplicates(subset='datetime')
 
+    # Subset based on confidence level
+    dx2 = dx2[dx2["conf"] > 0.3]
+
     # Full date time sequence
     date_rng = pd.date_range(start=dx2["datetime"].min(), end=dx2["datetime"].max(), freq='2S')
 
@@ -33,11 +33,11 @@ for i in range(0, 5):
     dx2 = dx2.set_index('datetime').reindex(date_rng, fill_value=0).reset_index().rename(columns={'index': 'datetime'})
 
     # Create a new y series which is a 10 point running mean of the original y series
-    y = dx2["counts"]/50
+    y = dx2["frame"]/50
     y_rolling = y.rolling(window=10).mean()
 
-    ax[i].plot(dx2["datetime"], y, c = "black", alpha = 0.5)
-    ax[i].plot(dx2["datetime"], y_rolling, color = "red", alpha = 0.5) 
+    ax[i].plot(dx2["datetime"], y, c = "red", alpha = 0.4)
+    ax[i].plot(dx2["datetime"], y_rolling, color = "black", alpha = 0.9) 
 
     label = dx2["name"].iloc[0]
     ax[i].annotate(label,
