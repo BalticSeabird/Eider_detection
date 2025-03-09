@@ -28,4 +28,4 @@ out["datetime"] = pd.to_datetime(out["datetime"], format = "mixed")
 
 out.sort_values(by = ["station", "datetime"], inplace = True) 
 
-out.to_csv("data/compiled_nanov5852_v2.csv", index = False)
+out.to_csv("data/compiled_nanov5852_v3.csv", index = False)
