@@ -7,7 +7,7 @@ import sys
 fig, ax = plt.subplots(5, 1)
 
 # Read data
-out = pd.read_csv("data/compiled_nanov5852_v3.csv")
+out = pd.read_csv("data/compiled_nanov5852_v4.csv")
 
 # Subset data for one station at the time: 
 stat = sys.argv[1]
@@ -24,16 +24,16 @@ for i in range(0, 5):
     dx2 = dx2.drop_duplicates(subset='datetime')
 
     # Subset based on confidence level
-    dx2 = dx2[dx2["conf"] > 0.3]
+    #dx2 = dx2[dx2["conf"] > 0.3]
 
     # Full date time sequence
-    date_rng = pd.date_range(start=dx2["datetime"].min(), end=dx2["datetime"].max(), freq='2S')
+    date_rng = pd.date_range(start=dx2["datetime"].min(), end=dx2["datetime"].max(), freq='2s')
 
     # Fill missing values
     dx2 = dx2.set_index('datetime').reindex(date_rng, fill_value=0).reset_index().rename(columns={'index': 'datetime'})
 
     # Create a new y series which is a 10 point running mean of the original y series
-    y = dx2["frame"]/50
+    y = dx2["counts"]/50
     y_rolling = y.rolling(window=10).mean()
 
     ax[i].plot(dx2["datetime"], y, c = "red", alpha = 0.4)
@@ -67,3 +67,11 @@ for i in range(0, 5):
         bbox=dict(facecolor='0.7', edgecolor='none', pad=3.0))
 plt.show()
  """
+
+
+
+cond1 = out["station"] == stat
+cond2 = out["datetime"] > "2024-05-03 04:00:00"
+cond3 = out["datetime"] < "2024-05-03 05:00:00"
+ 
+look = out[cond1 & cond2 & cond3]
