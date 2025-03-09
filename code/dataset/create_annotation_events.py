@@ -98,4 +98,4 @@ for stat in stations:
     events = pd.DataFrame(events, columns = ["event_id", "start", "end", "duration", "minute_second_end", "minute_second_start", "filepath"])
     events["station"] = stat
 
-    events.to_csv(f"dump/events_{stat}.csv", index = False)
+    events.to_csv(f"data/events_{stat}.csv", index = False)

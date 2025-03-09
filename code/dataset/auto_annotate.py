@@ -2,7 +2,7 @@
 import sys
 
 # Append paths to sys.path
-sys.path.append("/home/jonas/Documents/vscode/eider_model/code/generic_functions/") # Sprattus
+sys.path.append("/home/jonas/Documents/vscode/Eider_detection/code/generic_functions/") # Sprattus
 #sys.path.append("/home/jonas/Documents/vscode/ultralytics/") # Sprattus
 #sys.path.append("/Users/jonas/Documents/Programming/python/ultralytics/code/generic_functions/") # Mac
 
@@ -13,18 +13,18 @@ print("sys.path:", sys.path)
 from pathlib import Path
 import os
 import pandas as pd
-from functions import save_all_frames, cut_vid_simpler, remove_similar_images, annotate_images
+from functions import save_frames, cut_vid_simpler, remove_similar_images, annotate_images
 
 # Read arguments
-video_dir = sys.argv[1]
-video_meta_path = sys.argv[2]
-vid_outfold = sys.argv[3]
-im_outfold = sys.argv[4]
-yaml_outfold = sys.argv[5]
-yolo_model = sys.argv[6]
+video_dir = "../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/"
+video_meta_path = "data/events_EJDER2.csv"
+vid_outfold = "../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/vids/"
+im_outfold = "../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/ims/"
+yaml_outfold = "../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/yaml/"
+yolo_model = "../../../../../../mnt/BSP_NAS2/Software_Models/Eider_model/models/eider_model_medium_v5852.pt"
 
 # Read metadata on interesting videos
-video_meta = pd.read_csv(video_meta_path, sep=";")
+video_meta = pd.read_csv(video_meta_path, sep=",")
 
 # Run video cutting
 for row in video_meta.index:
@@ -33,13 +33,11 @@ for row in video_meta.index:
 
 # Extract frames from all vids
 for file in list(Path(vid_outfold).glob("*.mp4")):
-    save_all_frames(file, im_outfold)
+    save_frames(file, im_outfold, 15)
 
 # Remove similar images
-remove = remove_similar_images(im_outfold, 250000)
-[os.remove(file) for file in remove]
-
-# Remove video...
+#remove = remove_similar_images(im_outfold, 250000)
+#[os.remove(file) for file in remove]
 
 
 # Annotate images

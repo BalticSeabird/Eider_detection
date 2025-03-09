@@ -1,0 +1,2 @@
+rsync -r --progress jonas@77.235.243.22:/home/jonas/Documents/vscode/Eider_detection/data/annotations_yaml/ Desktop/eider01
+venv/bin/python labelImageLab.py -c eider_classes.txt

@@ -1,5 +1,14 @@
 
 
+import pandas as pd
+from pathlib import Path
+import os
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
+import cv2
+import numpy as np
+from ultralytics import YOLO
+import yaml
+
 
 # Minutes and seconds to seconds
 def minsec2sec(x):
@@ -9,7 +18,7 @@ def minsec2sec(x):
 def cut_vid_simpler(video_dir, row, savepath, addseconds): 
 
     # Build path to video
-    video = row["filename"]
+    video = row["filepath"]
     print(video)
     video_station = video.split("_")[-3]
     video_date = video.split("_")[-2]
@@ -17,8 +26,8 @@ def cut_vid_simpler(video_dir, row, savepath, addseconds):
     full_path = f'{video_dir}{video_station}/{video_date}/{video}'
     print(full_path)
 
-    startclip = row["start"]
-    endclip = row["end"]
+    startclip = row["minute_second_start"]
+    endclip = row["minute_second_end"]
     
     if any(pd.isnull([startclip, endclip, video])):
         print("skip")
@@ -38,10 +47,35 @@ def cut_vid_simpler(video_dir, row, savepath, addseconds):
                 filename_out
             )
             return(filename_out)
+            print(f'cut {full_path} from {startsec} to {endsec}')
         else: 
             print("file not found")
 
 
+
+
+# Read a video save frames as images
+def save_frames(input_video, image_folder, freq):
+    vidname = Path(input_video).stem
+    cap = cv2.VideoCapture(input_video)
+    if not cap.isOpened():
+        print("Error: Could not open the input video file")
+        exit()
+    count = 0
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+# If the current frame is a multiple of n, save it
+        if count % freq == 0:
+            countnum = str(count).zfill(4)                
+            cv2.imwrite(f'{image_folder}/{vidname}_{countnum}.png', frame)
+            print(f"Saved: frame {countnum}")
+
+        count += 1
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 # Read a video and save all frames as images
@@ -59,6 +93,7 @@ def save_all_frames(video_path, image_folder):
                 countnum = str(count).zfill(4)
                 cv2.imwrite(f'{image_folder}/{vidname}_{countnum}.png', frame)
                 count += 1
+                print(f'video {vidname}, frame {count}')
             else:
                 break
         cap.release()
@@ -67,9 +102,6 @@ def save_all_frames(video_path, image_folder):
     except: 
         print("Error: Could not open the input video file")
         pass
-
-
-
 
 
 
@@ -103,8 +135,6 @@ def euclidean_images(img1, img2):
     # Compute the Euclidean distance
     distance = np.linalg.norm(image1_flat - image2_flat)
     return distance
-
-
 
 
 
