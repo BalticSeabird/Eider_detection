@@ -23,7 +23,6 @@ d = {"name": ['crow', 'eider_female', 'eider_male', 'gull', 'razorbill'],
 class_id = pd.DataFrame(d)    
 
 out = out.merge(class_id, on = "class")
-out["counts"] = out["frame"].astype("int")
 
 out["datetime"] = pd.to_datetime(out["datetime"], format = "mixed")
 

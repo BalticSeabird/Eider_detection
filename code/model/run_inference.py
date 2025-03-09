@@ -9,7 +9,7 @@ device = sys.argv[1]
 stat = sys.argv[2]
 
 # Load a pretrained YOLO model
-modelpath = Path("models/eider_model_nano_v5852.pt")
+modelpath = Path("models/eider_model_medium_v5852.pt")
 model = YOLO(modelpath)
 modelname = modelpath.stem
 output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/{modelname}/'
