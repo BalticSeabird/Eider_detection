@@ -7,7 +7,7 @@ import sys
 import numpy as np
 
 # Read data
-out = pd.read_csv("data/compiled_nanov5852_v3.csv")
+out = pd.read_csv("data/compiled_nanov5852_v4.csv")
 out["datetime"] = pd.to_datetime(out["datetime"])
 
 stations = ["EJDER1", "EJDER2", "EJDER4", "EJDER5", "EJDER6", "EJDER7", "EJDER8", "EJDER12",  "EJDER13PATH"]
@@ -33,23 +33,8 @@ for stat in stations:
 
     # Plot time series of one station at the time, with datetime as time series and bars of bars for counts
     threshold = 0.75
-    y = dx2["frame"]/50
+    y = dx2["counts"]/50
     y_rolling = y.rolling(window=30).mean()
-
-    """fig, ax = plt.subplots(1, 1)
-
-    # Define event threshold
-
-    # Create a new y series which is a 10 point running mean of the original y series
-
-    #ax.plot(dx2["datetime"], y, c = "red", alpha = 0.4)
-    ax.plot(dx2["datetime"], y_rolling, color = "black", alpha = 0.9) 
-
-    # Horizontal line at threshold
-    ax.axhline(y=threshold, color='r', linestyle='--')
-
-    #plt.savefig("dump/eider1.png")
-    plt.show()"""
 
 
     # CREATE State machine
@@ -62,10 +47,9 @@ for stat in stations:
     state_change = list(state_change)
     state_change2 = list(state_change2)
 
+    # Add a 0 to the beginning of the list
     state_change.insert(0, 0)
     state_change2.insert(0, 0)
-
-    # Add a 0 to the beginning of the list
 
     # Assign a unique id to each event
     event_id = np.cumsum(state_change2)
@@ -98,4 +82,4 @@ for stat in stations:
     events = pd.DataFrame(events, columns = ["event_id", "start", "end", "duration", "minute_second_end", "minute_second_start", "filepath"])
     events["station"] = stat
 
-    events.to_csv(f"data/events_{stat}.csv", index = False)
+    events.to_csv(f"data/events/events_{stat}.csv", index = False)

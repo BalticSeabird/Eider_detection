@@ -28,7 +28,11 @@ def cut_vid_simpler(video_dir, row, savepath, addseconds):
 
     startclip = row["minute_second_start"]
     endclip = row["minute_second_end"]
-    
+    length = endclip - startclip
+
+    if length > 120: 
+        endclip = startclip + 120
+
     if any(pd.isnull([startclip, endclip, video])):
         print("skip")
 
