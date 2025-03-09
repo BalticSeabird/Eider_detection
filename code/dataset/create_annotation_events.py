@@ -89,8 +89,10 @@ for stat in stations:
         minute_second_start = format(start, "%M:%S")
         minute_second_end = format(end, "%M:%S")
         filepath = f'EjderNVR_{stat}_{date}_{hour}.00.00.mp4'
+        # New even id with station prefix
+        id = f"nanov5852_{stat}_{date}_{i}"
 
-        events.append([i, start, end, duration, minute_second_end, minute_second_start, filepath])
+        events.append([id, start, end, duration, minute_second_end, minute_second_start, filepath])
         
     # Create data frame of events
     events = pd.DataFrame(events, columns = ["event_id", "start", "end", "duration", "minute_second_end", "minute_second_start", "filepath"])
