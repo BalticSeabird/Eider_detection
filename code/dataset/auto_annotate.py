@@ -17,7 +17,7 @@ from functions import save_frames, cut_vid_simpler, remove_similar_images, annot
 
 # Read arguments
 video_dir = "../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/"
-video_meta_path = "data/events_EJDER2.csv"
+video_meta_path = "data/events_EJDER8.csv"
 vid_outfold = "../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/vids/"
 im_outfold = "../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/ims/"
 yaml_outfold = "../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/yaml/"
