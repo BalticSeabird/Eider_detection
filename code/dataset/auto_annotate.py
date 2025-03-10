@@ -22,7 +22,9 @@ event_fold_path = Path("data/events")
 for station in event_fold_path.glob("*.csv"):
 
     print(f'processing {station}')
- 
+    
+    #station = Path("data/events/events_EJDER2.csv")
+
     # Read arguments
     video_meta_path = station
     video_dir = "../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/"
@@ -39,7 +41,9 @@ for station in event_fold_path.glob("*.csv"):
         results = cut_vid_simpler(video_dir, video_meta.loc[row], vid_outfold, 10)
 
     # Extract frames from all vids
+    counter_vids = 0
     for file in list(Path(vid_outfold).glob("*.mp4")):
+        counter_vids += 1
         save_frames(file, im_outfold, 25)
 
     # Remove similar images

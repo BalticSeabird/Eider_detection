@@ -28,10 +28,6 @@ def cut_vid_simpler(video_dir, row, savepath, addseconds):
 
     startclip = row["minute_second_start"]
     endclip = row["minute_second_end"]
-    length = endclip - startclip
-
-    if length > 120: 
-        endclip = startclip + 120
 
     if any(pd.isnull([startclip, endclip, video])):
         print("skip")
@@ -39,8 +35,12 @@ def cut_vid_simpler(video_dir, row, savepath, addseconds):
     else: 
         startsec = minsec2sec(startclip)-addseconds
         endsec = minsec2sec(endclip)+addseconds
-        print(startsec)
-        print(endsec)
+
+        # Cut down long videos to max 2 minutes
+        length = endsec - startsec
+
+        if length > 120: 
+            endsec = startsec + 120
 
         if os.path.isfile(full_path):
             filename_out = f"{savepath}{Path(video).stem}_{startsec}_{endsec}.mp4"
@@ -64,49 +64,23 @@ def save_frames(input_video, image_folder, freq):
     cap = cv2.VideoCapture(input_video)
     if not cap.isOpened():
         print("Error: Could not open the input video file")
-        exit()
-    count = 0
-    while(cap.isOpened()):
-        ret, frame = cap.read()
-        if not ret:
-            break
-
-# If the current frame is a multiple of n, save it
-        if count % freq == 0:
-            countnum = str(count).zfill(4)                
-            cv2.imwrite(f'{image_folder}/{vidname}_{countnum}.png', frame)
-            print(f"Saved: frame {countnum}")
-
-        count += 1
-    cap.release()
-    cv2.destroyAllWindows()
-
-
-# Read a video and save all frames as images
-def save_all_frames(video_path, image_folder):
-    try: 
-        vidname = Path(video_path).stem
-        cap = cv2.VideoCapture(video_path)
-        if not cap.isOpened():
-            print("Error: Could not open the input video file")
-            exit()
+        pass
+    else: 
         count = 0
         while(cap.isOpened()):
             ret, frame = cap.read()
-            if ret==True:
-                countnum = str(count).zfill(4)
-                cv2.imwrite(f'{image_folder}/{vidname}_{countnum}.png', frame)
-                count += 1
-                print(f'video {vidname}, frame {count}')
-            else:
+            if not ret:
                 break
+
+    # If the current frame is a multiple of n, save it
+            if count % freq == 0:
+                countnum = str(count).zfill(4)                
+                cv2.imwrite(f'{image_folder}/{vidname}_{countnum}.png', frame)
+                print(f"Saved: frame {countnum} from {vidname}")
+
+            count += 1
         cap.release()
         cv2.destroyAllWindows()
-        print(f'number of frames = {count}')
-    except: 
-        print("Error: Could not open the input video file")
-        pass
-
 
 
 # Function for looking through images in a folder and remove those that are very similar to the previous one
