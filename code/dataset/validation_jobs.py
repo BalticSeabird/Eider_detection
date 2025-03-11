@@ -13,7 +13,7 @@ jobs = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/auto_annotate/jobs/
 n_files = len(list(images.glob("*.png")))
 
 # Annotation job size
-job_size = 30
+job_size = 100
 
 # Number of jobs
 n_jobs = 1 + n_files // job_size
@@ -39,5 +39,6 @@ for i in range(n_jobs):
 for i in range(n_files):
     images[i].rename(jobs.joinpath(f'job_{job_num[i]}/{images[i].name}'))
     yaml_file[i].rename(jobs.joinpath(f'job_{job_num[i]}/{yaml_file[i].name}'))
+    print(f'{images[i]} moved to job_{job_num[i]}')
 
  
