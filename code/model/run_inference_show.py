@@ -6,11 +6,13 @@ import sys
 import cv2
 
 # Load a pretrained YOLO model
-model = YOLO("runs/detect/train21/weights/best.pt")
-modelname = "best21_medium"
+modelpath = Path("models/eider_model_medium_v5852.pt")
+model = YOLO(modelpath)
+modelname = modelpath.stem
 
-#vid = "/Users/jonas/Downloads/vid/NVR_Hien_EJDER7_2024-05-16_07.00.00_001000_001200.mp4"
-vids = list(Path("../../../../../../mnt/BSP_NAS2_work/eider_model/eider_testvids/").rglob("*.mp4"))
+vids = [Path("../../../../../../mnt/BSP_NAS2_work/eider_model/eider_testvids/EjderNVR_EJDER1_2024-04-28_04.00.00_001425_001625.mp4"), 
+           Path("../../../../../../mnt/BSP_NAS2_work/eider_model/eider_testvids/EjderNVR_EJDER6_2024-05-03_08.00.00_001015_001215.mp4")]  
+#vids = list(Path("../../../../../../mnt/BSP_NAS2_work/eider_model/eider_testvids/").rglob("*.mp4"))
 
 # Run inference using the pretrained model and the inout video
 
