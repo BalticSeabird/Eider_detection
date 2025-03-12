@@ -74,7 +74,7 @@ def main():
     # Call the function to open the file dialog
     filename = select_file()
     videoname, freq = cut_vid(filename, "/Users/jonas/Downloads/vid/", 2)
-    save_frames(videoname, "/Users/jonas/Downloads/ims/", freq)
+    #save_frames(videoname, "/Users/jonas/Downloads/ims/", freq)
 
 
 if __name__ == "__main__":
