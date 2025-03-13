@@ -6,7 +6,7 @@ import sys
 import cv2
 
 # Load a pretrained YOLO model
-modelpath = Path("models/eider_model_medium_v5852.pt")
+modelpath = Path("models/eider_model_nano_v5852.pt")
 model = YOLO(modelpath)
 modelname = modelpath.stem
 
