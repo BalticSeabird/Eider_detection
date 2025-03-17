@@ -12,7 +12,7 @@ stat = sys.argv[2]
 modelpath = Path("models/eider_model_nano_v5852.pt")
 model = YOLO(modelpath)
 modelname = modelpath.stem
-output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/{modelname}/'
+output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2023/{modelname}/'
 
 if os.path.exists(output_dir1) == False:
     os.makedirs(output_dir1)
@@ -24,7 +24,7 @@ if os.path.exists(output_dir2) == False:
     os.makedirs(output_dir2)
 
 # Define input video path
-base_path = Path(f"../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/{stat}")
+base_path = Path(f"../../../../../../mnt/BSP_NAS2/Video/Video2023/{stat}")
 vids = list(base_path.rglob("*.mp4"))
 vids.sort()
 
