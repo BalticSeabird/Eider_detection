@@ -6,7 +6,7 @@ from pathlib import Path
 
 path = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/2024")
 #output = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider_model_nano_v5852/grouped")
-files = list(path.rglob("raw.csv"))
+files = list(path.rglob("*raw.csv"))
 
 for file in files: 
 
@@ -18,7 +18,7 @@ for file in files:
         continue
 
     else: 
-        print(f'processing{file.stem}')
+        print(f'processing... {file.stem}')
         grouped_data = out2.groupby([pd.Grouper(key='datetime', freq='5s'), "class"])
 
         # Aggregate grouped_data (mean confidence score)

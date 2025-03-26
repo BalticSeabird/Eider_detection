@@ -4,8 +4,8 @@ from pathlib import Path
 
 
 # Read folders 
-data_path = Path("data/nano_v5852/grouped")
-files = list(data_path.rglob("*grouped.csv"))
+data_path = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/2024")
+files = list(data_path.rglob("*grouped5s.csv"))
 
 # Compile data files
 out = pd.DataFrame()
@@ -28,4 +28,4 @@ out["datetime"] = pd.to_datetime(out["datetime"], format = "mixed")
 
 out.sort_values(by = ["station", "datetime"], inplace = True) 
 
-out.to_csv("data/compiled_nanov5852_v4.csv", index = False)
+out.to_csv("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider2024_nanov5852_v5.csv", index = False)
