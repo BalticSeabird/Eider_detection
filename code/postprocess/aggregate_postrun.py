@@ -18,6 +18,7 @@ for file in files:
         continue
 
     else: 
+        print(f'processing{file.stem}')
         grouped_data = out2.groupby([pd.Grouper(key='datetime', freq='5s'), "class"])
 
         # Aggregate grouped_data (mean confidence score)
