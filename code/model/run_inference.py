@@ -7,7 +7,7 @@ import sys
 # Input arguments (run device and station)
 device = sys.argv[1]
 stat = sys.argv[2]
-datelimit = pd.to_datetime("2024-05-19")
+datelimit = pd.to_datetime("2024-05-10")
 
 # Load a pretrained YOLO model
 modelpath = Path("models/eider_model_nano_v5852.pt")
