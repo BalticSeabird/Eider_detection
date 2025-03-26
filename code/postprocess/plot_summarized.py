@@ -7,7 +7,7 @@ import sys
 fig, ax = plt.subplots(5, 1)
 
 # Read data
-out = pd.read_csv("data/compiled_nanov5852_v4.csv")
+out = pd.read_csv("data/eider2024_nanov5852_v5.csv")
 
 # Subset data for one station at the time: 
 stat = sys.argv[1]
