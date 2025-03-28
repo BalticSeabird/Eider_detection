@@ -4,14 +4,14 @@ from pathlib import Path
 
 
 # Read folders 
-data_path = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/2024")
+data_path = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/")
 files = list(data_path.rglob("*grouped5s.csv"))
 
 # Compile data files
 out = pd.DataFrame()
 for file in files:
     temp = pd.read_csv(file)
-    temp["station"] = file.name.split("_")[-5]
+    temp["station"] = file.name.split("_")[-4]
     temp.rename(columns = {"datetime": "datetime", "class": "class", "conf": "conf", "frame": "counts"}, inplace = True)
     out = pd.concat([out, temp])
     print(f'compiling ... {file.name}')
@@ -28,6 +28,6 @@ out["datetime"] = pd.to_datetime(out["datetime"], format = "mixed")
 
 out.sort_values(by = ["station", "datetime"], inplace = True) 
 
-out.to_csv("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider2024_nanov5852_v5.csv", index = False)
+out.to_csv("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider2024_nanov5852_v8.csv", index = False)
 
 print(f'example rows: {out.head()}')

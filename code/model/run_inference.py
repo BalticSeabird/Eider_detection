@@ -7,13 +7,13 @@ import sys
 # Input arguments (run device and station)
 device = sys.argv[1]
 stat = sys.argv[2]
-datelimit = pd.to_datetime("2024-05-10")
+datelimit = pd.to_datetime("2023-01-01")
 
 # Load a pretrained YOLO model
 modelpath = Path("models/eider_model_nano_v5852.pt")
 model = YOLO(modelpath)
 modelname = modelpath.stem
-output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/{modelname}/'
+output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2023/{modelname}/'
 
 if os.path.exists(output_dir1) == False:
     os.makedirs(output_dir1)
@@ -25,7 +25,7 @@ if os.path.exists(output_dir2) == False:
     os.makedirs(output_dir2)
 
 # Define input video path
-base_path = Path(f"../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/{stat}")
+base_path = Path(f"../../../../../../mnt/BSP_NAS2/Video/Video2023/{stat}")
 vids = list(base_path.rglob("*.mp4"))
 vids.sort()
 
@@ -53,7 +53,7 @@ for vid in vids:
             fps = 25
 
             outname = output_dir2+"/"+vid.stem+"_raw.csv"
-            outname_grouped = output_dir2+"/"+vid.stem+"_grouped.csv"
+            #outname_grouped = output_dir2+"/"+vid.stem+"_grouped.csv"
 
             # Check that file has not been processed already 
 
@@ -115,14 +115,14 @@ for vid in vids:
                 out2["datetime"] = pd.to_datetime(out2["time"], unit = "s")
 
                 # Group by second
-                grouped_data = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"])
+                #grouped_data = out2.groupby([pd.Grouper(key='datetime', freq='2s'), "class"])
 
                 # Aggregate grouped_data (mean confidence score)
-                grouped = grouped_data.agg({"conf": "mean", 
-                                "frame": "count"}).reset_index()        
+                #grouped = grouped_data.agg({"conf": "mean", 
+                #                "frame": "count"}).reset_index()        
 
                 out2.to_csv(outname, index = False)
-                grouped.to_csv(outname_grouped, index = False)
+                #grouped.to_csv(outname_grouped, index = False)
         except: 
             print(f"Error with {vid} (probably file name), continue loop")
     else:   

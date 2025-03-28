@@ -3,8 +3,10 @@
 
 import pandas as pd
 from pathlib import Path
+import sys
 
-path = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/2024")
+station = sys.argv[1]
+path = Path(f"../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/{station}")
 #output = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider_model_nano_v5852/grouped")
 files = list(path.rglob("*raw.csv"))
 
@@ -12,7 +14,7 @@ for file in files:
 
     # Read in the file
     out2 = pd.read_csv(file, parse_dates = ["datetime"])
-    outname = file.parent.joinpath(f'{file.stem[0:-3]}_grouped5s.csv')
+    outname = file.parent.joinpath(f'{file.stem[0:-3]}grouped5s.csv')
 
     if len(out2) == 0:
         continue
@@ -27,3 +29,5 @@ for file in files:
 
         grouped.to_csv(outname, index = False)
 
+# Run example
+# python3 code/postprocess/aggregate_postrun.py "EJDER5"
