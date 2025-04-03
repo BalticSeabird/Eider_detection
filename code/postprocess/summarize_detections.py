@@ -2,7 +2,7 @@ import pandas as pd
 import sys
 
 # Read data
-out = pd.read_csv("data/eider2024_nanov5852_v5.csv", parse_dates = ["datetime"])
+out = pd.read_csv("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider2024_nanov5852_v8.csv", parse_dates = ["datetime"])
 out["date"] = out["datetime"].dt.date
 
 # Select station

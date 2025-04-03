@@ -7,7 +7,6 @@ import sys
 
 station = sys.argv[1]
 path = Path(f"../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/{station}")
-#output = Path("../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider_model_nano_v5852/grouped")
 files = list(path.rglob("*raw.csv"))
 
 for file in files: 
@@ -15,6 +14,8 @@ for file in files:
     # Read in the file
     out2 = pd.read_csv(file, parse_dates = ["datetime"])
     outname = file.parent.joinpath(f'{file.stem[0:-3]}grouped5s.csv')
+
+    # Add to the if loop to skip if the file does not exist!
 
     if len(out2) == 0:
         continue

@@ -3,12 +3,13 @@ from pathlib import Path
 import os
 import sys
 
-station = "EJDER5"
+# Define station in input
+station = sys.argv[1]
 
 # Define input video path
-base_path = Path(f"../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/2024/{station}")
+base_path = Path(f"../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/eider_model_nano_v5852/{station}")
 
-vids = list(base_path.rglob("*__grouped5s.csv"))
+vids = list(base_path.rglob("*grouped.csv"))
 
 # Delete all
 for vid in vids:
