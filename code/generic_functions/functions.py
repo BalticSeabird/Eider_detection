@@ -10,6 +10,46 @@ from ultralytics import YOLO
 import yaml
 
 
+import smtplib
+from email.message import EmailMessage
+from datetime import datetime
+
+
+def send_email(password, time, device, station, filename, start = True):
+
+    # Start or end of run
+    if start:
+        subject = f"Run of {station} on GPU {device} started {time} !"
+        body = f"First video = ..."
+    else:
+        subject = f"Run of {station} on GPU {device} completed {time} !"
+        body = f"Last video processed = {filename} !"
+    
+    # Email details
+    sender_email = "jhsemailservice@gmail.com"
+    recipient_email = "jonas.sundberg@slu.se"
+    
+    # Create the email
+    msg = EmailMessage()
+    msg["From"] = sender_email
+    msg["To"] = recipient_email
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+
+    # Send the email
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+        smtp.login(sender_email, password)
+        smtp.send_message(msg)
+
+    print("Email with run update sent successfully!")
+
+
+#password = input("Enter the password for the email account: ")
+#now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+
 # Minutes and seconds to seconds
 def minsec2sec(x):
     return int(x.split(":")[0])*60+int(x.split(":")[1])

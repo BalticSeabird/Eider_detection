@@ -3,11 +3,20 @@ from pathlib import Path
 from ultralytics import YOLO
 import os 
 import sys
+sys.path.append("/home/jonas/Documents/vscode/Eider_detection/code/generic_functions/") # Sprattus
+from functions import send_email
 
 # Input arguments (run device and station)
 device = sys.argv[1]
 stat = sys.argv[2]
-datelimit = pd.to_datetime("2024-05-09")
+password = input("Please type gmail password ... ")
+datelimit = pd.to_datetime("2024-05-11")
+
+# Send start email
+now = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
+filename = "none"
+send_email(password, now, device, stat, filename, start = True)
+
 
 # Load a pretrained YOLO model
 modelpath = Path("models/eider_model_nano_v5852.pt")
@@ -128,6 +137,10 @@ for vid in vids:
     else:   
         continue
 
+
+# Send end email
+now = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
+send_email(password, now, device, stat, filename, start = False)
 
 
 # Run example 
