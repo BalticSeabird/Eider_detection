@@ -10,7 +10,7 @@ from functions import send_email
 device = sys.argv[1]
 stat = sys.argv[2]
 password = input("Please type gmail password ... ")
-datelimit = pd.to_datetime("2024-05-11")
+datelimit = pd.to_datetime("2020-05-11")
 
 # Send start email
 now = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
@@ -22,7 +22,7 @@ send_email(password, now, device, stat, filename, start = True)
 modelpath = Path("models/eider_model_nano_v5852.pt")
 model = YOLO(modelpath)
 modelname = modelpath.stem
-output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2024/{modelname}/'
+output_dir1 = f'../../../../../../mnt/BSP_NAS2_work/eider_model/inference/2023/{modelname}/'
 
 if os.path.exists(output_dir1) == False:
     os.makedirs(output_dir1)
@@ -34,7 +34,7 @@ if os.path.exists(output_dir2) == False:
     os.makedirs(output_dir2)
 
 # Define input video path
-base_path = Path(f"../../../../../../mnt/BSP_NAS2_vol3/Video/Video2024/{stat}")
+base_path = Path(f"../../../../../../mnt/BSP_NAS2/Video/Video2023/{stat}")
 vids = list(base_path.rglob("*.mp4"))
 vids.sort()
 
