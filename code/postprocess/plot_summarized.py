@@ -6,7 +6,7 @@ import sys
 
 # Read data for one station at the time: 
 stat = sys.argv[1]
-out = pd.read_csv(f"data/eider2024_nanov5852_{stat}_v9.csv")
+out = pd.read_csv(f"data/eider2024_nanov5852_{stat}_v11.csv")
 out = out[out["station"] == stat]
 out["datetime"] = pd.to_datetime(out["datetime"])
 
