@@ -35,6 +35,6 @@ for station in stations:
 
     out.sort_values(by = ["datetime"], inplace = True) 
 
-    out.to_csv(f"../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider{year}_nanov5852_{station.name}_v10.csv", index = False)
+    out.to_csv(f"../../../../../../mnt/BSP_NAS2_work/eider_model/inference/eider{year}_nanov5852_{station.name}_v12.csv", index = False)
 
     print(f'example rows: {out.head()}')
